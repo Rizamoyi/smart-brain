@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import Clarifai from 'clarifai';
 import Particles from 'react-tsparticles';
 import { loadFull } from 'tsparticles';
 import Navigation from './components/Navigation/Navigation';
@@ -11,10 +10,6 @@ import Rank from './components/Rank/Rank';
 import Logo from './components/Logo/Logo';
 
 import './App.css';
-
-const app = new Clarifai.App({
-  apiKey: '3e2b7c4f0aa54aa6a11448306b9fc0ab',
-});
 
 const particlesOptions = {
   fpsLimit: 120,
@@ -142,8 +137,14 @@ class App extends Component {
 
   onPictureSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-    app.models
-      .predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+    fetch('http://localhost:3000/imageUrl', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: this.state.input,
+      }),
+    })
+      .then((response) => response.json())
       .then((response) => {
         if (response) {
           fetch('http://localhost:3000/image', {
