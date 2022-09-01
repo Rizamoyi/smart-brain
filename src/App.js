@@ -94,6 +94,7 @@ const initialState = {
   },
 };
 
+// Move to react hooks
 class App extends Component {
   constructor() {
     super();
